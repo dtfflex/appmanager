@@ -68,7 +68,12 @@
     </select>
     <button onclick="addMerchant()">Add Merchant</button>
   </div>
-  <input id="searchBox" placeholder="Search by Code or Name..." oninput="loadMerchants()" style="margin-bottom: 20px; padding: 8px; width: 300px; border-radius: 8px; border: 1px solid #ccc;" />
+  <div style="margin-bottom: 20px;">
+  <input id="searchBox" placeholder="Search by Code or Name..." style="padding: 8px; width: 250px; border-radius: 8px; border: 1px solid #ccc;" />
+  <button onclick="loadMerchants()" style="padding: 8px 16px; border-radius: 8px; border: none; background-color: #2e3a59; color: white; margin-left: 10px;">
+    Search
+  </button>
+  </div>
 
   <table>
     <thead>
