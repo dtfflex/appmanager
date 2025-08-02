@@ -91,41 +91,45 @@
     </div>
   </div>
 
-  <script>
-    function calculateProfit() {
-      const product = document.getElementById('product').value;
-      const print = document.getElementById('print').value;
-      const quantity = parseInt(document.getElementById('quantity').value);
-      const sellingPrice = parseFloat(document.getElementById('selling').value);
+<script>
+  function calculateProfit() {
+    const product = document.getElementById('product').value;
+    const print = document.getElementById('print').value;
+    const quantity = parseInt(document.getElementById('quantity').value);
+    const sellingPrice = parseFloat(document.getElementById('selling').value);
 
-      if (isNaN(quantity) || isNaN(sellingPrice) || quantity <= 0) {
-        alert("Please enter valid quantity and selling price.");
-        return;
-      }
-
-      // Base product cost
-      let productCost = (product === "Drop Shoulder") ? 300 : 220;
-
-      // Base print cost
-      let printCost = (print === "A4") ? 100 : 120 : 150 : 180;
-
-      // Apply 30% compound discounts
-      if (quantity >= 2) printCost *= 0.75;
-      if (quantity >= 3) printCost *= 0.75;
-
-      const costPerItem = productCost + printCost;
-      const totalCost = costPerItem * quantity;
-      const totalSelling = sellingPrice * quantity;
-      const totalProfit = totalSelling - totalCost;
-      const profitPerItem = totalProfit / quantity;
-
-      // Show results
-      document.getElementById('result').style.display = 'block';
-      document.getElementById('cost').innerText = "Total Cost: ৳" + totalCost.toFixed(2);
-      document.getElementById('sellingTotal').innerText = "Total Selling: ৳" + totalSelling.toFixed(2);
-      document.getElementById('profit').innerText = "Total Profit: ৳" + totalProfit.toFixed(2);
-      document.getElementById('profitEach').innerText = "Profit Per Item: ৳" + profitPerItem.toFixed(2);
+    if (isNaN(quantity) || isNaN(sellingPrice) || quantity <= 0) {
+      alert("Please enter valid quantity and selling price.");
+      return;
     }
-  </script>
+
+    // Base product cost
+    let productCost = (product === "Drop Shoulder") ? 300 : 220;
+
+    // Base print cost
+    let printCost = 0;
+    if (print === "A5") printCost = 100;
+    else if (print === "A4") printCost = 120;
+    else if (print === "A3") printCost = 150;
+    else if (print === "A2") printCost = 180;
+
+    // Apply 30% compound discounts
+    if (quantity >= 2) printCost *= 0.75;
+    if (quantity >= 3) printCost *= 0.75;
+
+    const costPerItem = productCost + printCost;
+    const totalCost = costPerItem * quantity;
+    const totalSelling = sellingPrice * quantity;
+    const totalProfit = totalSelling - totalCost;
+    const profitPerItem = totalProfit / quantity;
+
+    // Show results
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('cost').innerText = "Total Cost: ৳" + totalCost.toFixed(2);
+    document.getElementById('sellingTotal').innerText = "Total Selling: ৳" + totalSelling.toFixed(2);
+    document.getElementById('profit').innerText = "Total Profit: ৳" + totalProfit.toFixed(2);
+    document.getElementById('profitEach').innerText = "Profit Per Item: ৳" + profitPerItem.toFixed(2);
+  }
+</script>
 </body>
       </html>
