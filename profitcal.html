@@ -68,8 +68,10 @@
 
     <label for="print">Select Print Size</label>
     <select id="print">
+      <option value="A5">A5</option>
       <option value="A4">A4</option>
       <option value="A3">A3</option>
+      <option value="A2">A2</option>
     </select>
 
     <label for="quantity">Quantity</label>
@@ -105,11 +107,11 @@
       let productCost = (product === "Drop Shoulder") ? 300 : 220;
 
       // Base print cost
-      let printCost = (print === "A4") ? 120 : 150;
+      let printCost = (print === "A4") ? 100 : 120 : 150 : 180;
 
       // Apply 30% compound discounts
-      if (quantity >= 2) printCost *= 0.7;
-      if (quantity >= 3) printCost *= 0.7;
+      if (quantity >= 2) printCost *= 0.75;
+      if (quantity >= 3) printCost *= 0.75;
 
       const costPerItem = productCost + printCost;
       const totalCost = costPerItem * quantity;
