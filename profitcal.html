@@ -104,18 +104,18 @@
     }
 
     // Base product cost
-    let productCost = (product === "Drop Shoulder") ? 300 : 220;
+    let productCost = (product === "Drop Shoulder") ? 250 : 200;
 
     // Base print cost
     let printCost = 0;
-    if (print === "A5") printCost = 100;
-    else if (print === "A4") printCost = 120;
-    else if (print === "A3") printCost = 150;
-    else if (print === "A2") printCost = 180;
+    if (print === "A5") printCost = 70;
+    else if (print === "A4") printCost = 90;
+    else if (print === "A3") printCost = 130;
+    else if (print === "A2") printCost = 200;
 
-    // Apply 30% compound discounts
-    if (quantity >= 2) printCost *= 0.75;
-    if (quantity >= 3) printCost *= 0.75;
+
+    if (quantity >= 2) printCost *= 1;
+    if (quantity >= 3) printCost *= 1;
 
     const costPerItem = productCost + printCost;
     const totalCost = costPerItem * quantity;
