@@ -68,6 +68,7 @@
     </select>
     <button onclick="addMerchant()">Add Merchant</button>
   </div>
+  <input id="searchBox" placeholder="Search by Code or Name..." oninput="loadMerchants()" style="margin-bottom: 20px; padding: 8px; width: 300px; border-radius: 8px; border: 1px solid #ccc;" />
 
   <table>
     <thead>
@@ -163,6 +164,43 @@
     }
 
     loadMerchants();
+    async function loadMerchants() {
+  const tbody = document.getElementById("merchantTable");
+  tbody.innerHTML = "";
+
+  const searchTerm = document.getElementById("searchBox")?.value?.toLowerCase() || "";
+
+  const snapshot = await db.collection("merchants").get();
+  snapshot.forEach(doc => {
+    const m = doc.data();
+    const code = doc.id;
+
+    // Filter by code or name
+    if (
+      !searchTerm ||
+      code.toLowerCase().includes(searchTerm) ||
+      m.name.toLowerCase().includes(searchTerm)
+    ) {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${code}</td>
+        <td><input value="${m.name}" onchange="updateField('${code}', 'name', this.value)" /></td>
+        <td>
+          <select onchange="updateField('${code}', 'status', this.value)">
+            <option ${m.status == 'Active' ? 'selected' : ''}>Active</option>
+            <option ${m.status == 'Inactive' ? 'selected' : ''}>Inactive</option>
+          </select>
+        </td>
+        <td><input value="${m.phone}" onchange="updateField('${code}', 'phone', this.value)" /></td>
+        <td><input value="${m.joined}" onchange="updateField('${code}', 'joined', this.value)" /></td>
+        <td><input type="number" value="${m.profit}" onchange="updateField('${code}', 'profit', this.value)" /></td>
+        <td><input type="number" value="${m.transactions}" onchange="updateField('${code}', 'transactions', this.value)" /></td>
+        <td><button onclick="deleteMerchant('${code}')">Delete</button></td>
+      `;
+      tbody.appendChild(row);
+    }
+  });
+        }
   </script>
 </body>
 </html>
