@@ -139,7 +139,8 @@
 
       <div class="odf-field">
         <label for="your-name"> Merchant Code*</label>
-        <input type="text" id="your-name" required placeholder="Enter Your Merchant Code" />
+        <input type="text" id="your-name" name="merchantCode" required placeholder="Enter Your Merchant Code" />
+      <p id="merchantStatus" style="margin-top: 5px; font-weight: bold;"></p>
       </div>
 
       <div class="odf-field">
@@ -252,6 +253,46 @@
     <div class="close-btn" onclick="hideCustomAlert()">Close</div>
   </div>
 
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBEg331rihZSWQkPV8CHOCpnuYZErtRZ0o",
+    authDomain: "dtfflex.firebaseapp.com",
+    projectId: "dtfflex",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Listen to code input changes
+  document.addEventListener("DOMContentLoaded", () => {
+    const codeInput = document.querySelector('input[name="merchantCode"]') || document.getElementById("merchantCode");
+    const statusBox = document.getElementById("merchantStatus");
+
+    if (codeInput) {
+      codeInput.addEventListener("input", async () => {
+        const code = codeInput.value.trim();
+        if (!code) {
+          statusBox.textContent = "";
+          return;
+        }
+
+        try {
+          const doc = await db.collection("merchants").doc(code).get();
+          if (doc.exists) {
+            const data = doc.data();
+            statusBox.style.color = "green";
+            statusBox.textContent = `✅ Merchant Exists: ${data.name}`;
+          } else {
+            statusBox.style.color = "red";
+            statusBox.textContent = `❌ Merchant Not Found`;
+          }
+        } catch (err) {
+          statusBox.style.color = "red";
+          statusBox.textContent = "⚠️ Error checking merchant";
+        }
+      });
+    }
+  });
+  </script>
   <script>
     const botToken = '7681391311:AAFHkC0yIodefhvM8fTZ-lD5EtNwwTJHJOs';
     const chatId = '7992860091';
