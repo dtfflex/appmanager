@@ -1,335 +1,307 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Order Form • DTFFLEX</title>
-  <link rel="icon" href="favicon.png" type="image/x-icon">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #fdfdff url('https://www.transparenttextures.com/patterns/fabric-of-squares.png');
-      background-repeat: repeat;
-      color: #01003c;
-      scroll-behavior: smooth;
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1" />  
+  <title>Order Form • DTFFLEX</title>  
+  <link rel="icon" href="favicon.png" type="image/x-icon">  
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+  <style>  
+    body {  
+      margin: 0;  
+      font-family: 'Poppins', sans-serif;  
+      background: #fdfdff url('https://www.transparenttextures.com/patterns/fabric-of-squares.png');  
+      background-repeat: repeat;  
+      color: #01003c;  
+      scroll-behavior: smooth;  
+    }  
+    .odf-container {  
+      max-width: 800px;  
+      margin: 40px auto;  
+      padding: 30px;  
+      background: #ffffff;  
+      border-radius: 10px;  
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);  
+    }  
+    .odf-title {  
+      text-align: center;  
+      font-size: 2rem;  
+      margin-bottom: 25px;  
+      font-weight: bold;  
+    }  
+    .odf-field {  
+      margin-bottom: 20px;  
+    }  
+    .odf-field label {  
+      display: block;  
+      margin-bottom: 6px;  
+      font-weight: 600;  
+    }  
+    .odf-field input,  
+    .odf-field select,  
+    .odf-field textarea {  
+      width: 100%;  
+      padding: 10px;  
+      font-size: 1rem;  
+      border: 1px solid #ccc;  
+      border-radius: 6px;  
+      box-sizing: border-box;  
+    }  
+    .odf-field textarea {  
+      min-height: 100px;  
+      resize: vertical;  
+    }  
+    .odf-submit {  
+      display: inline-block;  
+      background-color: #01003c;  
+      color: white;  
+      border: none;  
+      padding: 14px 28px;  
+      font-size: 1rem;  
+      border-radius: 6px;  
+      cursor: pointer;  
+      transition: background-color 0.3s ease;  
+    }  
+    .odf-submit:hover {  
+      background-color: #1a1a5e;  
+    }  
+    #merchantStatus {  
+      font-weight: bold;  
+      margin-top: 5px;  
+      min-height: 20px;  
     }
-    .odf-container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 30px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    }
-    .odf-title {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 25px;
-      font-weight: bold;
-    }
-    .odf-field {
-      margin-bottom: 20px;
-    }
-    .odf-field label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    .odf-field input,
-    .odf-field select,
-    .odf-field textarea {
-      width: 100%;
-      padding: 10px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-    }
-    .odf-field textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-    .odf-submit {
-      display: inline-block;
-      background-color: #01003c;
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .odf-submit:hover {
-      background-color: #1a1a5e;
-    }
-    #customAlert {
-      display: none;
-      position: fixed;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #fff;
-      border: 2px solid #01003c;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-      z-index: 9999;
-      text-align: center;
-      max-width: 90%;
-      width: 400px;
-    }
-    #customAlert h2 {
-      font-size: 1.4rem;
-      margin-bottom: 15px;
-      color: #01003c;
-    }
-    #customAlert p {
-      font-size: 1rem;
-      margin-bottom: 20px;
-    }
-    #customAlert a {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #0088cc;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-    #customAlert a:hover {
-      background-color: #0077b3;
-    }
-    #customAlert .close-btn {
-      margin-top: 20px;
-      display: inline-block;
-      padding: 8px 18px;
-      background-color: #01003c;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    #overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.4);
-      z-index: 9998;
-    }
-    #dropship {  
-      border: 2px solid #000;  
-      border-radius: 14px 14px 4px;
-      padding: 15px;
-      margin-left: -10px;
-      width: 95%;
-      margin-bottom: 20px;
-  </style>
-</head>
-<body>
-  <div class="odf-container">
-    <h1 class="odf-title">Place Your Order</h1>
-    <div id="dropship">
-      📌 <strong>Dropshipping Note*:</strong>  আমাদের কাছ থেকে যদি আপনি ড্রপশিপিং না করতে পারেন তাহলে হোম স্ক্রিনে টুটোরিয়াল এ ক্লিক করে কিভাবে কি করতে হয় তা দেখে নিন
+     #dropship {      
+      border: 2px solid #000;      
+      border-radius: 14px 14px 4px;    
+      padding: 15px;    
+      margin-left: -10px;    
+      width: 95%;    
+      margin-bottom: 20px;    
+  </style>  
+</head>  
+<body>  
+  <div class="odf-container">  
+    <h1 class="odf-title">Place Your Order</h1>  
+ <div id="dropship">    
+      📌 <strong>Dropshipping Note*:</strong>  আমাদের কাছ থেকে যদি আপনি ড্রপশিপিং না করতে পারেন তাহলে হোম স্ক্রিনে টুটোরিয়াল এ ক্লিক করে কিভাবে কি করতে হয় তা দেখে নিন    
     </div>
-
-    <form id="telegramOrderForm">
-
-      <div class="odf-field">
-        <label for="your-name"> Merchant Code*</label>
-        <input type="text" id="your-name" name="merchantCode" required placeholder="Enter Your Merchant Code" />
-      <p id="merchantStatus" style="margin-top: 5px; font-weight: bold;"></p>
-      </div>
+    <form id="telegramOrderForm">  
 
       <div class="odf-field">
-        <label for="your-email">Your Name*</label>
-        <input type="text" id="your-email" required placeholder="Enter Your Name" />
+        <label for="merchantCode">Merchant Code*</label>
+        <input type="text" id="merchantCode" name="merchantCode" required placeholder="Enter Your Merchant Code" />
+        <p id="merchantStatus"></p>
       </div>
 
-      <div class="odf-field">
-        <label for="your-phone">Your Phone Number*</label>
-        <input type="tel" id="your-phone" required placeholder="Enter Your Phone Number" />
-      </div>
+      <div class="odf-field">  
+        <label for="your-name">Your Name*</label>  
+        <input type="text" id="your-name" required placeholder="Enter Your Name" />  
+      </div>  
 
-      <div class="odf-field">
-        <label for="customer-name">Customer Name*</label>
-        <input type="text" id="customer-name" required placeholder="Customer Full Name" />
-      </div>
+      <div class="odf-field">  
+        <label for="your-phone">Your Phone Number*</label>  
+        <input type="tel" id="your-phone" required placeholder="Enter Your Phone Number" />  
+      </div>  
 
-      <div class="odf-field">
-        <label for="customer-phone">Customer Phone Number*</label>
-        <input type="tel" id="customer-phone" required placeholder="Customer Mobile Number" />
-      </div>
+      <div class="odf-field">  
+        <label for="customer-name">Customer Name*</label>  
+        <input type="text" id="customer-name" required placeholder="Customer Full Name" />  
+      </div>  
 
-      <div class="odf-field">
-        <label for="address">Customer Address*</label>
-        <textarea id="address" required placeholder="Full delivery address"></textarea>
-      </div>
+      <div class="odf-field">  
+        <label for="customer-phone">Customer Phone Number*</label>  
+        <input type="tel" id="customer-phone" required placeholder="Customer Mobile Number" />  
+      </div>  
 
-      <div class="odf-field">
-        <label for="product">Product</label>
-        <select id="product" required>
-          <option value="">Select one</option>
-          <option>Dropshoulder</option>
-          <option>Regular Fit</option>
-        </select>
-      </div>
+      <div class="odf-field">  
+        <label for="address">Customer Address*</label>  
+        <textarea id="address" required placeholder="Full delivery address"></textarea>  
+      </div>  
 
-      <div class="odf-field">
-        <label for="color">Color</label>
-     <select id="color" required>
-          <option value="">Select one</option>
-          <option>Black</option><option>White</option>
-        </select>
-      </div>
+      <div class="odf-field">  
+        <label for="product">Product</label>  
+        <select id="product" required>  
+          <option value="">Select one</option>  
+          <option>Dropshoulder</option>  
+          <option>Regular Fit</option>  
+        </select>  
+      </div>  
 
-      <div class="odf-field">
-        <label for="size">Size</label>
-        <select id="size" required>
-          <option value="">Select one</option>
-          <option>S</option><option>M</option><option>L</option>
-          <option>XL</option><option>2XL</option><option>3XL</option>
-        </select>
-      </div>
+      <div class="odf-field">  
+        <label for="color">Color</label>  
+        <select id="color" required>  
+          <option value="">Select one</option>  
+          <option>Black</option><option>White</option>  
+        </select>  
+      </div>  
 
-      <div class="odf-field">
-        <label for="print">Print Type</label>
-        <select id="print" required>
-          <option value="">Select one</option>
-          <option>A2</option><option>A3</option><option>A4</option><option>A5</option><option>None</option>
-        </select>
-      </div>
+      <div class="odf-field">  
+        <label for="size">Size</label>  
+        <select id="size" required>  
+          <option value="">Select one</option>  
+          <option>S</option><option>M</option><option>L</option>  
+          <option>XL</option><option>2XL</option><option>3XL</option>  
+        </select>  
+      </div>  
 
-      <div class="odf-field">
-        <label for="quantity">Quantity</label>
-        <input type="number" id="quantity" required min="1" />
-      </div>
+      <div class="odf-field">  
+        <label for="print">Print Type</label>  
+        <select id="print" required>  
+          <option value="">Select one</option>  
+          <option>A2</option><option>A3</option><option>A4</option><option>A5</option><option>None</option>  
+        </select>  
+      </div>  
 
-      <div class="odf-field">
-        <label for="price">Your Resell Price</label>
-        <p style="margin: 4px 0; color: gray;">(We minus it from cost price. Extra is your profit!)</p>
-        <input type="text" id="price" required placeholder="E.g. 500tk" />
-      </div>
+      <div class="odf-field">  
+        <label for="quantity">Quantity</label>  
+        <input type="number" id="quantity" required min="1" />  
+      </div>  
 
-      <div class="odf-field">
-        <label for="note">Additional Instructions</label>
-        <textarea id="note" placeholder="Design ta front/back a bosbe etc..."></textarea>
-      </div>
+      <div class="odf-field">  
+        <label for="price">Your Resell Price</label>  
+        <p style="margin: 4px 0; color: gray;">(We minus it from cost price. Extra is your profit!)</p>  
+        <input type="text" id="price" required placeholder="E.g. 500tk" />  
+      </div>  
 
-      <!-- 💳 Nagad Payment Section -->
-      <div style="border: 2px solid #e60044; background: #fff5f8; padding: 20px; border-radius: 12px; margin-top: 30px;">
-        <h3 style="color: #e60044;">📢 Payment Instruction</h3>
-        <p>You Must Pay The <strong>T-shirt Price First</strong>. See Price Section Before Paying</p>
-        <h2 style="text-decoration:underline; color: #e60044;">Nagad (Send Money)</h2>
-        <p><strong>Send to:</strong> <span style="font-weight: bold; font-size: 18px;">01706441482</span></p>
-       <p>Send Only The Tshirt Price </p>
-       <p>Dropshoulder = 250tk </p>
-       <p>Regular Fit = 200tk </p>
-        <label>TXID (Transaction ID)</label>
-        <input type="text" id="txid" required placeholder="e.g. TX1234ABC" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+      <div class="odf-field">  
+        <label for="note">Additional Instructions</label>  
+        <textarea id="note" placeholder="Design ta front/back a bosbe etc..."></textarea>  
+      </div>  
 
-        <label>Your Name</label>
-        <input type="text" id="merchant_name" required placeholder="Enter Your Name" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+      <!-- Nagad Payment Section -->  
+      <div style="border: 2px solid #e60044; background: #fff5f8; padding: 20px; border-radius: 12px; margin-top: 30px;">  
+        <h3 style="color: #e60044;">📢 Payment Instruction</h3>  
+        <p>You Must Pay The <strong>T-shirt Price First</strong>. See Price Section Before Paying</p>  
+        <h2 style="text-decoration:underline; color: #e60044;">Nagad (Send Money)</h2>  
+        <p><strong>Send to:</strong> <span style="font-weight: bold; font-size: 18px;">01706441482</span></p>  
+        <p>Send Only The Tshirt Price </p>  
+        <p>Dropshoulder = 250tk </p>  
+        <p>Regular Fit = 200tk </p>  
+        <label>TXID (Transaction ID)</label>  
+        <input type="text" id="txid" required placeholder="e.g. TX1234ABC" style="width: 100%; padding: 8px; margin-bottom: 10px;">  
 
-        <label>Last 4 Digits of Nagad Number</label>
-        <input type="text" id="nagad_last4" maxlength="4" required placeholder="e.g. 1234" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+        <label>Your Name</label>  
+        <input type="text" id="merchant_name" required placeholder="Enter Your Name" style="width: 100%; padding: 8px; margin-bottom: 10px;">  
 
-        <label>Amount Sent (৳)</label>
-        <input type="number" id="amount_sent" required placeholder="e.g. 350" style="width: 100%; padding: 8px;">
-      </div>
+        <label>Last 4 Digits of Nagad Number</label>  
+        <input type="text" id="nagad_last4" maxlength="4" required placeholder="e.g. 1234" style="width: 100%; padding: 8px; margin-bottom: 10px;">  
 
-      <!-- 🔘 Submit Button -->
-      <button type="submit" class="odf-submit" style="margin-top: 20px;">Submit Order</button>
+        <label>Amount Sent (৳)</label>  
+        <input type="number" id="amount_sent" required placeholder="e.g. 350" style="width: 100%; padding: 8px;">  
+      </div>  
+
+      <button type="submit" class="odf-submit" style="margin-top: 20px;">Submit Order</button>  
     </form>
   </div>
 
-  <!-- ✅ Custom Alert -->
-  <div id="overlay"></div>
-  <div id="customAlert">
-    <h2>🎉 Order Received!</h2>
-    <p>Please send your design and mockup file using the "Send Design" Button 👇</p>
-    <div class="close-btn" onclick="hideCustomAlert()">Close</div>
-  </div>
-
   <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBEg331rihZSWQkPV8CHOCpnuYZErtRZ0o",
-    authDomain: "dtfflex.firebaseapp.com",
-    projectId: "dtfflex",
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEg331rihZSWQkPV8CHOCpnuYZErtRZ0o",
+      authDomain: "dtfflex.firebaseapp.com",
+      projectId: "dtfflex"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-  // Listen to code input changes
-  document.addEventListener("DOMContentLoaded", () => {
-    const codeInput = document.querySelector('input[name="merchantCode"]') || document.getElementById("merchantCode");
+    // Merchant code status check
+    const merchantInput = document.getElementById("merchantCode");
     const statusBox = document.getElementById("merchantStatus");
 
-    if (codeInput) {
-      codeInput.addEventListener("input", async () => {
-        const code = codeInput.value.trim();
-        if (!code) {
-          statusBox.textContent = "";
-          return;
-        }
+    let debounceTimer;
+    merchantInput.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      const code = merchantInput.value.trim();
 
-        try {
-          const doc = await db.collection("merchants").doc(code).get();
-          if (doc.exists) {
-            const data = doc.data();
-            statusBox.style.color = "green";
-            statusBox.textContent = `✅ Merchant Exists: ${data.name}`;
-          } else {
-            statusBox.style.color = "red";
-            statusBox.textContent = `❌ Merchant Not Found`;
-          }
-        } catch (err) {
-          statusBox.style.color = "red";
-          statusBox.textContent = "⚠️ Error checking merchant";
-        }
-      });
-    }
-  });
-  </script>
-  <script>
+      if (!code) {
+        statusBox.textContent = "";
+        statusBox.style.color = "";
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        db.collection("merchants").doc(code).get()
+          .then(doc => {
+            if (doc.exists) {
+              statusBox.style.color = "green";
+              statusBox.textContent = `✅ Merchant Exists: ${doc.data().name}`;
+            } else {
+              statusBox.style.color = "red";
+              statusBox.textContent = "❌ Merchant Not Found";
+            }
+          })
+          .catch(error => {
+            console.error("Error checking merchant:", error);
+            statusBox.style.color = "orange";
+            statusBox.textContent = "⚠️ Error checking merchant";
+          });
+      }, 500);
+    });
+
+    // Telegram bot info
     const botToken = '7681391311:AAFHkC0yIodefhvM8fTZ-lD5EtNwwTJHJOs';
     const chatId = '7992860091';
 
+    // Form submit handler
     const form = document.getElementById('telegramOrderForm');
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
 
+      // Gather all form data
       const data = {
-        name: document.getElementById('your-name').value,
-        email: document.getElementById('your-email').value,
-        phone: document.getElementById('your-phone').value,
-        customerName: document.getElementById('customer-name').value,
-        customerPhone: document.getElementById('customer-phone').value,
-        address: document.getElementById('address').value,
+        merchantCode: merchantInput.value.trim(),
+        yourName: document.getElementById('your-name').value.trim(),
+        yourPhone: document.getElementById('your-phone').value.trim(),
+        customerName: document.getElementById('customer-name').value.trim(),
+        customerPhone: document.getElementById('customer-phone').value.trim(),
+        address: document.getElementById('address').value.trim(),
         product: document.getElementById('product').value,
         color: document.getElementById('color').value,
         size: document.getElementById('size').value,
         print: document.getElementById('print').value,
         quantity: document.getElementById('quantity').value,
-        resellPrice: document.getElementById('price').value,
-        note: document.getElementById('note').value,
-        txid: document.getElementById('txid').value,
-        merchantName: document.getElementById('merchant_name').value,
-        nagadLast4: document.getElementById('nagad_last4').value,
-        amountSent: document.getElementById('amount_sent').value
+        resellPrice: document.getElementById('price').value.trim(),
+        note: document.getElementById('note').value.trim(),
+        txid: document.getElementById('txid').value.trim(),
+        merchantName: document.getElementById('merchant_name').value.trim(),
+        nagadLast4: document.getElementById('nagad_last4').value.trim(),
+        amountSent: document.getElementById('amount_sent').value.trim()
       };
 
-      const message = `📦 *New Order from App*\n\n👨‍💻 Code: ${data.name}\n👤 Name: ${data.email}\n📞 Phone: ${data.phone}\n
-👤 Customer: ${data.customerName}\n📞 Customer Phone: ${data.customerPhone}\n🏠 Address: ${data.address}\n
-🏦 Product: ${data.product}\n🖊️ Color: ${data.color}\n🔹 Size: ${data.size}\n📏 Print: ${data.print}\n📉 Quantity: ${data.quantity}\n💰 Resell Price: ${data.resellPrice}\n
-📌 Note: ${data.note}\n
-💳 *Nagad Payment Info:*\n• TXID: ${data.txid}\n• Merchant Name: ${data.merchantName}\n• Last 4 Digits: ${data.nagadLast4}\n• Amount Sent: ৳${data.amountSent}`;
+      // Prepare Telegram message text (Markdown)
+      const message = 
+`📦 *New Order from DTFFLEX*\n
+👨‍💻 Merchant Code: ${data.merchantCode}
+👤 Your Name: ${data.yourName}
+📞 Your Phone: ${data.yourPhone}
 
+👤 Customer Name: ${data.customerName}
+📞 Customer Phone: ${data.customerPhone}
+🏠 Address: ${data.address}
+
+🏦 Product: ${data.product}
+🖊️ Color: ${data.color}
+🔹 Size: ${data.size}
+📏 Print: ${data.print}
+📉 Quantity: ${data.quantity}
+💰 Resell Price: ${data.resellPrice}
+
+📌 Note: ${data.note}
+
+💳 *Nagad Payment Info:*
+• TXID: ${data.txid}
+• Merchant Name: ${data.merchantName}
+• Last 4 Digits: ${data.nagadLast4}
+• Amount Sent: ৳${data.amountSent}`;
+
+      // Send message via Telegram Bot API
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           chat_id: chatId,
           text: message,
@@ -339,28 +311,20 @@
       .then(res => res.json())
       .then(response => {
         if (response.ok) {
+          alert("🎉 Order sent successfully!");
           form.reset();
-          showCustomAlert();
+          statusBox.textContent = "";
+          statusBox.style.color = "";
         } else {
-          alert("❌ Order failed to send. Please try again.");
+          alert("❌ Failed to send order. Try again.");
           console.error(response);
         }
       })
       .catch(error => {
-        console.error("Telegram Error:", error);
-        alert("❌ Network issue. Try again later.");
+        alert("❌ Network error. Try later.");
+        console.error("Telegram error:", error);
       });
     });
-
-    function showCustomAlert() {
-      document.getElementById('customAlert').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
-    }
-
-    function hideCustomAlert() {
-      document.getElementById('customAlert').style.display = 'none';
-      document.getElementById('overlay').style.display = 'none';
-    }
   </script>
-</body>
-  </html>
+</body>  
+          </html>
