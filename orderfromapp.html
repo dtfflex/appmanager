@@ -176,13 +176,14 @@
 <!-- Insert before <div class="odf-field"> for Retail Price -->
 <div class="odf-field">
   <label><strong>📊 Costing Breakdown</strong></label>
+   <p style="margin: 4px 0; color: gray;">Including Delivery Charge*</p>
   <div id="costingSummary" style="padding: 12px; background: #f3f4f6; border-radius: 8px; font-weight: 500;">
     Total Cost: <span id="totalCost">৳0</span>
   </div>
 </div>
       <div class="odf-field">  
         <label for="price">Your Resell Price</label>  
-        <p style="margin: 4px 0; color: gray;">(We minus it from cost price. Extra is your profit!)</p>  
+        <p style="margin: 4px 0; color: gray;">Delivery Charge Soho Apni Jei Dam a Bechben Seta Likhun*</p>  
         <input type="text" id="price" required placeholder="E.g. 500tk" />  
       </div>  
       <!-- Add after Retail Price field -->
@@ -192,7 +193,11 @@
     ৳0
   </div>
 </div>
-
+      <div class="odf-field">  
+        <label for="cod">Total COD:</label>  
+        <p style="margin: 4px 0; color: gray;">Apnar Customer Ar Kase Amra Koto Taka Nibo?*</p>  
+        <input type="text" id="cod" required placeholder="E.g. 500tk" />  
+      </div>  
       <div class="odf-field">  
         <label for="note">Additional Instructions</label>  
         <textarea id="note" placeholder="Design ta front/back a bosbe etc..."></textarea>  
@@ -319,6 +324,7 @@ form.addEventListener('submit', function(e) {
     print: document.getElementById('print').value,
     quantity: document.getElementById('quantity').value,
     resellPrice: document.getElementById('price').value.trim(),
+    cod: document.getElementById('cod').value.trim(),
     note: document.getElementById('note').value.trim(),
     txid: document.getElementById('txid').value.trim(),
     merchantName: document.getElementById('merchant_name').value.trim(),
@@ -351,8 +357,8 @@ const totalCost = costWithoutDelivery + deliveryCharge;
 const message = 
 `📦 *New Order from DTFFLEX*\n
 👨‍💻 Merchant Code: ${data.merchantCode}
-👤 Your Name: ${data.yourName}
-📞 Your Phone: ${data.yourPhone}
+👤 Merchant Name: ${data.yourName}
+📞 Merchant Phone: ${data.yourPhone}
 
 👤 Customer Name: ${data.customerName}
 📞 Customer Phone: ${data.customerPhone}
@@ -367,6 +373,7 @@ const message =
 🚚 Delivery Charge Collected: *${deliveryText}*
 🧾 Total Cost (Calc): *৳${totalCost}*
 💰 Resell Price: ${data.resellPrice}
+🧾 COD: *৳${data.cod}* 
 
 📌 Note: ${data.note}
 
@@ -450,4 +457,4 @@ const radios = document.querySelectorAll("input[name='deliveryCharge']");
 radios.forEach(radio => radio.addEventListener("change", calculateCosting));
 </script>
 </body>  
-  </html>
+          </html>
