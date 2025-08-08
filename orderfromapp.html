@@ -163,8 +163,8 @@
       <!-- Add after Print size selector -->
 <div class="odf-field" id="odfd">
   <label>Did You Collect Delivery Charge?</label>
-  <label><input type="radio" name="deliveryCharge" value="yes" checked> Yes (৳130)</label>
-  <label><input type="radio" name="deliveryCharge" value="no"> No (৳0)</label>
+  <label><input type="radio" name="deliveryCharge" value="yes" checked> No (৳130)</label>
+  <label><input type="radio" name="deliveryCharge" value="no"> Yes (৳130)</label>
 </div>
 <style>
   #odfd{
@@ -328,7 +328,7 @@ form.addEventListener('submit', function(e) {
 
   // 📤 Telegram message send
  const deliveryValue = document.querySelector("input[name='deliveryCharge']:checked")?.value;
-const deliveryText = deliveryValue === "yes" ? "Yes (৳130)" : "No (৳0)";
+const deliveryText = deliveryValue === "yes" ? "No (৳130)" : "Yes (৳0)";
 
 // Recalculate cost here to show in message
 let base = 0;
