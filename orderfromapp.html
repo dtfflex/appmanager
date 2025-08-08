@@ -163,8 +163,8 @@
       <!-- Add after Print size selector -->
 <div class="odf-field" id="odfd">
   <label>Did You Collect Delivery Charge?</label>
-  <label><input type="radio" name="deliveryCharge" value="yes" checked> No (৳130)</label>
-  <label><input type="radio" name="deliveryCharge" value="no"> Yes (৳130)</label>
+  <label><input type="radio" name="deliveryCharge" value="yes" checked> No </label>
+  <label><input type="radio" name="deliveryCharge" value="no"> Yes </label>
 </div>
 <style>
   #odfd{
@@ -328,7 +328,7 @@ form.addEventListener('submit', function(e) {
 
   // 📤 Telegram message send
  const deliveryValue = document.querySelector("input[name='deliveryCharge']:checked")?.value;
-const deliveryText = deliveryValue === "yes" ? "No (৳130)" : "Yes (৳0)";
+const deliveryText = deliveryValue === "yes" ? "No" : "Yes";
 
 // Recalculate cost here to show in message
 let base = 0;
@@ -344,7 +344,7 @@ switch (data.print) {
 }
 
 const qty = parseInt(data.quantity);
-const deliveryCharge = deliveryValue === "yes" ? 130 : 0;
+const deliveryCharge = deliveryValue === "yes" ? 130 : 130;
 const costWithoutDelivery = (base + printCost) * qty;
 const totalCost = costWithoutDelivery + deliveryCharge;
 
@@ -424,7 +424,7 @@ function calculateCosting() {
   }
 
   // Delivery charge added only once
-  const deliveryCharge = delivery === "yes" ? 130 : 0;
+  const deliveryCharge = delivery === "yes" ? 130 : 130;
 
   // Total = (product + print) * qty + delivery once
   const costWithoutDelivery = (base + printCost) * qty;
