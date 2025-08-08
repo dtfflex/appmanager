@@ -5,13 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />  
   <title>Order Form • DTFFLEX</title>  
   <link rel="icon" href="favicon.png" type="image/x-icon">  
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
   <style>  
-    body {  
+  placeholder{
+    font-family 'Poppins';
+  }
+  body {  
       margin: 0;  
       font-family: 'Poppins', sans-serif;  
       background: #fdfdff url('https://www.transparenttextures.com/patterns/fabric-of-squares.png');  
@@ -90,7 +93,8 @@
       📌 <strong>Dropshipping Note*:</strong>  আমাদের কাছ থেকে যদি আপনি ড্রপশিপিং না করতে পারেন তাহলে হোম স্ক্রিনে টুটোরিয়াল এ ক্লিক করে কিভাবে কি করতে হয় তা দেখে নিন    
     </div>
     <form id="telegramOrderForm">  
-
+<p style="color:red;">Merchant Info</p>
+<hr>
       <div class="odf-field">
         <label for="merchantCode">Merchant Code*</label>
         <input type="text" id="merchantCode" name="merchantCode" required placeholder="Enter Your Merchant Code" />
@@ -106,7 +110,8 @@
         <label for="your-phone">Your Phone Number*</label>  
         <input type="tel" id="your-phone" required placeholder="Enter Your Phone Number" />  
       </div>  
-
+<p style="color: red;">Customer Info</p>
+<hr>
       <div class="odf-field">  
         <label for="customer-name">Customer Name*</label>  
         <input type="text" id="customer-name" required placeholder="Customer Full Name" />  
@@ -121,7 +126,8 @@
         <label for="address">Customer Address*</label>  
         <textarea id="address" required placeholder="Full delivery address"></textarea>  
       </div>  
-
+<p style="color: red;">Product Info</p>
+<hr>
       <div class="odf-field">  
         <label for="product">Product</label>  
         <select id="product" required>  
@@ -161,8 +167,10 @@
         <input type="number" id="quantity" required min="1" />  
       </div>  
       <!-- Add after Print size selector -->
+<p style="color:red;">Delivery Info</p>
+<hr>
 <div class="odf-field" id="odfd">
-  <label>Did You Collect Delivery Charge?</label>
+  <label>Did You Collect The Delivery Charge?</label>
   <label><input type="radio" name="deliveryCharge" value="yes" checked> No </label>
   <label><input type="radio" name="deliveryCharge" value="no"> Yes </label>
 </div>
@@ -202,7 +210,8 @@
         <label for="note">Additional Instructions</label>  
         <textarea id="note" placeholder="Design ta front/back a bosbe etc..."></textarea>  
       </div>  
-
+<p style="color:red;">Payment Info</p>
+<hr>
       <!-- Nagad Payment Section -->  
       <div style="border: 2px solid #e60044; background: #fff5f8; padding: 20px; border-radius: 12px; margin-top: 30px;">  
         <h3 style="color: #e60044;">📢 Payment Instruction</h3>  
@@ -457,4 +466,4 @@ const radios = document.querySelectorAll("input[name='deliveryCharge']");
 radios.forEach(radio => radio.addEventListener("change", calculateCosting));
 </script>
 </body>  
-          </html>
+  </html>
