@@ -11,235 +11,283 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
   <style>  
-  placeholder{
-    font-family 'Poppins';
-  }
-  body {  
-      margin: 0;  
-      font-family: 'Poppins', sans-serif;  
-      background: #fdfdff url('https://www.transparenttextures.com/patterns/fabric-of-squares.png');  
-      background-repeat: repeat;  
-      color: #01003c;  
-      scroll-behavior: smooth;  
+    placeholder{
+      font-family 'Poppins';
+    }
+    body {  
+        margin: 0;  
+        font-family: 'Poppins', sans-serif;  
+        background: #fdfdff url('https://www.transparenttextures.com/patterns/fabric-of-squares.png');  
+        background-repeat: repeat;  
+        color: #01003c;  
+        scroll-behavior: smooth;  
     }  
     .odf-container {  
-      max-width: 800px;  
-      margin: 40px auto;  
-      padding: 30px;  
-      background: #ffffff;  
-      border-radius: 10px;  
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);  
+        max-width: 800px;  
+        margin: 40px auto;  
+        padding: 30px;  
+        background: #ffffff;  
+        border-radius: 10px;  
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);  
     }  
     .odf-title {  
-      text-align: center;  
-      font-size: 2rem;  
-      margin-bottom: 25px;  
-      font-weight: bold;  
+        text-align: center;  
+        font-size: 2rem;  
+        margin-bottom: 25px;  
+        font-weight: bold;  
     }  
     .odf-field {  
-      margin-bottom: 20px;  
+        margin-bottom: 20px;  
     }  
     .odf-field label {  
-      display: block;  
-      margin-bottom: 6px;  
-      font-weight: 600;  
+        display: block;  
+        margin-bottom: 6px;  
+        font-weight: 600;  
     }  
     .odf-field input,  
     .odf-field select,  
     .odf-field textarea {  
-      width: 100%;  
-      padding: 10px;  
-      font-size: 1rem;  
-      border: 1px solid #ccc;  
-      border-radius: 6px;  
-      box-sizing: border-box;  
+        width: 100%;  
+        padding: 10px;  
+        font-size: 1rem;  
+        border: 1px solid #ccc;  
+        border-radius: 6px;  
+        box-sizing: border-box;  
     }  
     .odf-field textarea {  
-      min-height: 100px;  
-      resize: vertical;  
+        min-height: 100px;  
+        resize: vertical;  
     }  
     .odf-submit {  
-      display: inline-block;  
-      background-color: #01003c;  
-      color: white;  
-      border: none;  
-      padding: 14px 28px;  
-      font-size: 1rem;  
-      border-radius: 6px;  
-      cursor: pointer;  
-      transition: background-color 0.3s ease;  
+        display: inline-block;  
+        background-color: #01003c;  
+        color: white;  
+        border: none;  
+        padding: 14px 28px;  
+        font-size: 1rem;  
+        border-radius: 6px;  
+        cursor: pointer;  
+        transition: background-color 0.3s ease;  
     }  
     .odf-submit:hover {  
-      background-color: #1a1a5e;  
+        background-color: #1a1a5e;  
     }  
     #merchantStatus {  
-      font-weight: bold;  
-      margin-top: 5px;  
-      min-height: 20px;  
+        font-weight: bold;  
+        margin-top: 5px;  
+        min-height: 20px;  
     }
-     #dropship {      
+    #dropship {      
       border: 2px solid #000;      
       border-radius: 14px 14px 4px;    
       padding: 15px;    
       margin-left: -10px;    
       width: 95%;    
       margin-bottom: 20px;    
+    }
+    /* Hide all steps by default */
+    .form-step {
+      display: none;
+    }
+    /* Show the active step */
+    .form-step.active {
+      display: block;
+    }
+    /* Navigation buttons container */
+    .form-navigation {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .form-navigation button {
+      background-color: #01003c;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    .form-navigation button:hover:not(:disabled) {
+      background-color: #1a1a5e;
+    }
+    .form-navigation button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
   </style>  
 </head>  
 <body>  
   <div class="odf-container">  
     <h1 class="odf-title">Place Your Order</h1>  
- <div id="dropship">    
+    <div id="dropship">    
       📌 <strong>Dropshipping Note*:</strong>  আমাদের কাছ থেকে যদি আপনি ড্রপশিপিং না করতে পারেন তাহলে হোম স্ক্রিনে টুটোরিয়াল এ ক্লিক করে কিভাবে কি করতে হয় তা দেখে নিন    
     </div>
-    <form id="telegramOrderForm">  
-<p style="color:red;">Merchant Info</p>
-<hr>
-      <div class="odf-field">
-        <label for="merchantCode">Merchant Code*</label>
-        <input type="text" id="merchantCode" name="merchantCode" required placeholder="Enter Your Merchant Code" />
-        <p id="merchantStatus"></p>
+    <form id="telegramOrderForm">
+
+      <!-- Step 1: Merchant Info -->
+      <div class="form-step active" data-step="1">
+        <p style="color:red;">Merchant Info</p>
+        <hr>
+        <div class="odf-field">
+          <label for="merchantCode">Merchant Code*</label>
+          <input type="text" id="merchantCode" name="merchantCode" required placeholder="Enter Your Merchant Code" />
+          <p id="merchantStatus"></p>
+        </div>
+        <div class="odf-field">  
+          <label for="your-name">Your Name*</label>  
+          <input type="text" id="your-name" required placeholder="Enter Your Name" />  
+        </div>  
+        <div class="odf-field">  
+          <label for="your-phone">Your Phone Number*</label>  
+          <input type="tel" id="your-phone" required placeholder="Enter Your Phone Number" />  
+        </div>
       </div>
 
-      <div class="odf-field">  
-        <label for="your-name">Your Name*</label>  
-        <input type="text" id="your-name" required placeholder="Enter Your Name" />  
-      </div>  
+      <!-- Step 2: Customer Info -->
+      <div class="form-step" data-step="2">
+        <p style="color: red;">Customer Info</p>
+        <hr>
+        <div class="odf-field">  
+          <label for="customer-name">Customer Name*</label>  
+          <input type="text" id="customer-name" required placeholder="Customer Full Name" />  
+        </div>  
+        <div class="odf-field">  
+          <label for="customer-phone">Customer Phone Number*</label>  
+          <input type="tel" id="customer-phone" required placeholder="Customer Mobile Number" />  
+        </div>  
+        <div class="odf-field">  
+          <label for="address">Customer Address*</label>  
+          <textarea id="address" required placeholder="Full delivery address"></textarea>  
+        </div>
+      </div>
 
-      <div class="odf-field">  
-        <label for="your-phone">Your Phone Number*</label>  
-        <input type="tel" id="your-phone" required placeholder="Enter Your Phone Number" />  
-      </div>  
-<p style="color: red;">Customer Info</p>
-<hr>
-      <div class="odf-field">  
-        <label for="customer-name">Customer Name*</label>  
-        <input type="text" id="customer-name" required placeholder="Customer Full Name" />  
-      </div>  
+      <!-- Step 3: Product Info -->
+      <div class="form-step" data-step="3">
+        <p style="color: red;">Product Info</p>
+        <hr>
+        <div class="odf-field">  
+          <label for="product">Product</label>  
+          <select id="product" required>  
+            <option value="">Select one</option>  
+            <option>Dropshoulder</option>  
+            <option>Regular Fit</option>  
+          </select>  
+        </div>  
+        <div class="odf-field">  
+          <label for="color">Color</label>  
+          <select id="color" required>  
+            <option value="">Select one</option>  
+            <option>Black</option><option>White</option>  
+          </select>  
+        </div>  
+        <div class="odf-field">  
+          <label for="size">Size</label>  
+          <select id="size" required>  
+            <option value="">Select one</option>  
+            <option>S</option><option>M</option><option>L</option>  
+            <option>XL</option><option>2XL</option><option>3XL</option>  
+          </select>  
+        </div>  
+        <div class="odf-field">  
+          <label for="print">Print Type</label>  
+          <select id="print" required>  
+            <option value="">Select one</option>  
+            <option>A2</option><option>A3</option><option>A4</option><option>A5</option><option>None</option>  
+          </select>  
+        </div>  
+        <div class="odf-field">  
+          <label for="quantity">Quantity</label>  
+          <input type="number" id="quantity" required min="1" />  
+        </div>  
+      </div>
 
-      <div class="odf-field">  
-        <label for="customer-phone">Customer Phone Number*</label>  
-        <input type="tel" id="customer-phone" required placeholder="Customer Mobile Number" />  
-      </div>  
+      <!-- Step 4: Delivery Info -->
+      <div class="form-step" data-step="4">
+        <p style="color:red;">Delivery Info</p>
+        <hr>
+        <div class="odf-field" id="odfd">
+          <label>Did You Collect The Delivery Charge?</label>
+          <label><input type="radio" name="deliveryCharge" value="yes" checked> No </label>
+          <label><input type="radio" name="deliveryCharge" value="no"> Yes </label>
+        </div>
+        <style>
+          #odfd{
+            border: 1px solid black;
+            padding: 10px;
+            border-radius: 20px;
+          }
+        </style>
+        <div class="odf-field">
+          <label><strong>📊 Costing Breakdown</strong></label>
+          <p style="margin: 4px 0; color: gray;">Including Delivery Charge*</p>
+          <div id="costingSummary" style="padding: 12px; background: #f3f4f6; border-radius: 8px; font-weight: 500;">
+            Total Cost: <span id="totalCost">৳0</span>
+          </div>
+        </div>
+        <div class="odf-field">  
+          <label for="price">Your Resell Price</label>  
+          <p style="margin: 4px 0; color: gray;">Delivery Charge Soho Apni Jei Dam a Bechben Seta Likhun*</p>  
+          <input type="text" id="price" required placeholder="E.g. 500tk" />  
+        </div>  
+        <div class="odf-field">
+          <label><strong>📈 Your Profit:</strong></label>
+          <div id="profitAmount" style="padding: 10px; background: #e7fff3; border-radius: 6px; font-weight: 600; color: green;">
+            ৳0
+          </div>
+        </div>
+        <div class="odf-field">  
+          <label for="cod">Total COD:</label>  
+          <p style="margin: 4px 0; color: gray;">Apnar Customer Ar Kase Amra Koto Taka Nibo?*</p>  
+          <input type="text" id="cod" required placeholder="E.g. 500tk" />  
+        </div>  
+        <div class="odf-field">  
+          <label for="note">Additional Instructions</label>  
+          <textarea id="note" placeholder="Design ta front/back a bosbe etc..."></textarea>  
+        </div>  
+      </div>
 
-      <div class="odf-field">  
-        <label for="address">Customer Address*</label>  
-        <textarea id="address" required placeholder="Full delivery address"></textarea>  
-      </div>  
-<p style="color: red;">Product Info</p>
-<hr>
-      <div class="odf-field">  
-        <label for="product">Product</label>  
-        <select id="product" required>  
-          <option value="">Select one</option>  
-          <option>Dropshoulder</option>  
-          <option>Regular Fit</option>  
-        </select>  
-      </div>  
+      <!-- Step 5: Payment Info -->
+      <div class="form-step" data-step="5">
+        <p style="color:red;">Payment Info</p>
+        <hr>
+        <div style="border: 2px solid #e60044; background: #fff5f8; padding: 20px; border-radius: 12px; margin-top: 30px;">  
+          <h3 style="color: #e60044;">📢 Payment Instruction</h3>  
+          <p>You Must Pay The <strong>T-shirt Price First</strong>. See Price Section Before Paying</p>  
+          <h2 style="text-decoration:underline; color: #e60044;">Nagad (Send Money)</h2>  
+          <p><strong>Send to:</strong> <span style="font-weight: bold; font-size: 18px;">01706441482</span></p>  
+          <p>Send Only The Tshirt Price </p>  
+          <p>Dropshoulder = 250tk </p>  
+          <p>Regular Fit = 200tk </p>  
+          <label>TXID (Transaction ID)</label>  
+          <input type="text" id="txid" required placeholder="e.g. TX1234ABC" style="width: 100%; padding: 8px; margin-bottom: 10px;">  
 
-      <div class="odf-field">  
-        <label for="color">Color</label>  
-        <select id="color" required>  
-          <option value="">Select one</option>  
-          <option>Black</option><option>White</option>  
-        </select>  
-      </div>  
+          <label>Your Name</label>  
+          <input type="text" id="merchant_name" required placeholder="Enter Your Name" style="width: 100%; padding: 8px; margin-bottom: 10px;">  
 
-      <div class="odf-field">  
-        <label for="size">Size</label>  
-        <select id="size" required>  
-          <option value="">Select one</option>  
-          <option>S</option><option>M</option><option>L</option>  
-          <option>XL</option><option>2XL</option><option>3XL</option>  
-        </select>  
-      </div>  
+          <label>Last 4 Digits of Nagad Number</label>  
+          <input type="text" id="nagad_last4" maxlength="4" required placeholder="e.g. 1234" style="width: 100%; padding: 8px; margin-bottom: 10px;">  
 
-      <div class="odf-field">  
-        <label for="print">Print Type</label>  
-        <select id="print" required>  
-          <option value="">Select one</option>  
-          <option>A2</option><option>A3</option><option>A4</option><option>A5</option><option>None</option>  
-        </select>  
-      </div>  
+          <label>Amount Sent (৳)</label>  
+          <input type="number" id="amount_sent" required placeholder="e.g. 350" style="width: 100%; padding: 8px;">  
+        </div>  
+      </div>
 
-      <div class="odf-field">  
-        <label for="quantity">Quantity</label>  
-        <input type="number" id="quantity" required min="1" />  
-      </div>  
-      <!-- Add after Print size selector -->
-<p style="color:red;">Delivery Info</p>
-<hr>
-<div class="odf-field" id="odfd">
-  <label>Did You Collect The Delivery Charge?</label>
-  <label><input type="radio" name="deliveryCharge" value="yes" checked> No </label>
-  <label><input type="radio" name="deliveryCharge" value="no"> Yes </label>
-</div>
-<style>
-  #odfd{
-    border: 1px solid black;
-    padding: 10px;
-    border-radius: 20px;
-  }
-</style>
-<!-- Insert before <div class="odf-field"> for Retail Price -->
-<div class="odf-field">
-  <label><strong>📊 Costing Breakdown</strong></label>
-   <p style="margin: 4px 0; color: gray;">Including Delivery Charge*</p>
-  <div id="costingSummary" style="padding: 12px; background: #f3f4f6; border-radius: 8px; font-weight: 500;">
-    Total Cost: <span id="totalCost">৳0</span>
-  </div>
-</div>
-      <div class="odf-field">  
-        <label for="price">Your Resell Price</label>  
-        <p style="margin: 4px 0; color: gray;">Delivery Charge Soho Apni Jei Dam a Bechben Seta Likhun*</p>  
-        <input type="text" id="price" required placeholder="E.g. 500tk" />  
-      </div>  
-      <!-- Add after Retail Price field -->
-<div class="odf-field">
-  <label><strong>📈 Your Profit:</strong></label>
-  <div id="profitAmount" style="padding: 10px; background: #e7fff3; border-radius: 6px; font-weight: 600; color: green;">
-    ৳0
-  </div>
-</div>
-      <div class="odf-field">  
-        <label for="cod">Total COD:</label>  
-        <p style="margin: 4px 0; color: gray;">Apnar Customer Ar Kase Amra Koto Taka Nibo?*</p>  
-        <input type="text" id="cod" required placeholder="E.g. 500tk" />  
-      </div>  
-      <div class="odf-field">  
-        <label for="note">Additional Instructions</label>  
-        <textarea id="note" placeholder="Design ta front/back a bosbe etc..."></textarea>  
-      </div>  
-<p style="color:red;">Payment Info</p>
-<hr>
-      <!-- Nagad Payment Section -->  
-      <div style="border: 2px solid #e60044; background: #fff5f8; padding: 20px; border-radius: 12px; margin-top: 30px;">  
-        <h3 style="color: #e60044;">📢 Payment Instruction</h3>  
-        <p>You Must Pay The <strong>T-shirt Price First</strong>. See Price Section Before Paying</p>  
-        <h2 style="text-decoration:underline; color: #e60044;">Nagad (Send Money)</h2>  
-        <p><strong>Send to:</strong> <span style="font-weight: bold; font-size: 18px;">01706441482</span></p>  
-        <p>Send Only The Tshirt Price </p>  
-        <p>Dropshoulder = 250tk </p>  
-        <p>Regular Fit = 200tk </p>  
-        <label>TXID (Transaction ID)</label>  
-        <input type="text" id="txid" required placeholder="e.g. TX1234ABC" style="width: 100%; padding: 8px; margin-bottom: 10px;">  
+      <!-- Navigation buttons -->
+      <div class="form-navigation">
+        <button type="button" id="prevBtn" disabled>Previous</button>
+        <button type="button" id="nextBtn">Next</button>
+      </div>
 
-        <label>Your Name</label>  
-        <input type="text" id="merchant_name" required placeholder="Enter Your Name" style="width: 100%; padding: 8px; margin-bottom: 10px;">  
-
-        <label>Last 4 Digits of Nagad Number</label>  
-        <input type="text" id="nagad_last4" maxlength="4" required placeholder="e.g. 1234" style="width: 100%; padding: 8px; margin-bottom: 10px;">  
-
-        <label>Amount Sent (৳)</label>  
-        <input type="number" id="amount_sent" required placeholder="e.g. 350" style="width: 100%; padding: 8px;">  
-      </div>  
-
-      <button type="submit" class="odf-submit" style="margin-top: 20px;">Submit Order</button>  
+      <!-- Submit button only on last step -->
+      <button type="submit" class="odf-submit" style="margin-top: 20px; display: none;" id="submitBtn">Submit Order</button>  
     </form>
   </div>
 
   <script>
-    // Initialize Firebase
+    // Firebase initialization and merchant status check as in your code, unchanged...
     const firebaseConfig = {
       apiKey: "AIzaSyBEg331rihZSWQkPV8CHOCpnuYZErtRZ0o",
       authDomain: "dtfflex.firebaseapp.com",
@@ -247,123 +295,161 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+
     let isMerchantInactive = false;
-    // Global flag
-    // Merchant code status check
     const merchantInput = document.getElementById("merchantCode");
     const statusBox = document.getElementById("merchantStatus");
+    const form = document.getElementById('telegramOrderForm');
+    let debounceTimer;
 
-    let debounceTimer;merchantInput.addEventListener("input", () => {
-  clearTimeout(debounceTimer);
-  const code = merchantInput.value.trim();
+    merchantInput.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      const code = merchantInput.value.trim();
 
-  if (!code) {
-    statusBox.textContent = "";
-    statusBox.style.color = "";
-    form.querySelector("button[type='submit']").disabled = false;
-    isMerchantInactive = false;
-    return;
-  }
+      if (!code) {
+        statusBox.textContent = "";
+        statusBox.style.color = "";
+        form.querySelector("button[type='submit']").disabled = false;
+        isMerchantInactive = false;
+        return;
+      }
 
-  debounceTimer = setTimeout(() => {
-    db.collection("merchants").doc(code).get()
-      .then(doc => {
-        if (doc.exists) {
-          const merchant = doc.data();
-          if (merchant.status && merchant.status.toLowerCase() === "inactive") {
-            statusBox.style.color = "red";
-            statusBox.innerHTML = `❌ Merchant Exists: ${merchant.name}<br>Sorry! Your account is currently <strong>inactive</strong>. Please contact Customer Support.`;
+      debounceTimer = setTimeout(() => {
+        db.collection("merchants").doc(code).get()
+          .then(doc => {
+            if (doc.exists) {
+              const merchant = doc.data();
+              if (merchant.status && merchant.status.toLowerCase() === "inactive") {
+                statusBox.style.color = "red";
+                statusBox.innerHTML = `❌ Merchant Exists: ${merchant.name}<br>Sorry! Your account is currently <strong>inactive</strong>. Please contact Customer Support.`;
+                form.querySelector("button[type='submit']").disabled = true;
+                isMerchantInactive = true;
+              } else {
+                statusBox.style.color = "green";
+                statusBox.textContent = `✅ Merchant Exists: ${merchant.name}`;
+                form.querySelector("button[type='submit']").disabled = false;
+                isMerchantInactive = false;
+              }
+            } else {
+              statusBox.style.color = "red";
+              statusBox.textContent = "❌ Merchant Not Found";
+              form.querySelector("button[type='submit']").disabled = true;
+              isMerchantInactive = true;
+            }
+          })
+          .catch(error => {
+            console.error("Error checking merchant:", error);
+            statusBox.style.color = "orange";
+            statusBox.textContent = "⚠️ Error checking merchant";
             form.querySelector("button[type='submit']").disabled = true;
             isMerchantInactive = true;
-          } else {
-            statusBox.style.color = "green";
-            statusBox.textContent = `✅ Merchant Exists: ${merchant.name}`;
-            form.querySelector("button[type='submit']").disabled = false;
-            isMerchantInactive = false;
-          }
-        } else {
-          statusBox.style.color = "red";
-          statusBox.textContent = "❌ Merchant Not Found";
-          form.querySelector("button[type='submit']").disabled = true;
-          isMerchantInactive = true;
-        }
-      })
-      .catch(error => {
-        console.error("Error checking merchant:", error);
-        statusBox.style.color = "orange";
-        statusBox.textContent = "⚠️ Error checking merchant";
-        form.querySelector("button[type='submit']").disabled = true;
-        isMerchantInactive = true;
+          });
+      }, 500);
+    });
+
+    // Multi-step form logic
+    const steps = document.querySelectorAll(".form-step");
+    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    let currentStep = 0; // zero-based index
+
+    function showStep(step) {
+      steps.forEach((s, i) => {
+        s.classList.toggle("active", i === step);
       });
-  }, 500);
-});
-    
+      prevBtn.disabled = step === 0;
+      nextBtn.style.display = step === steps.length - 1 ? "none" : "inline-block";
+      submitBtn.style.display = step === steps.length - 1 ? "inline-block" : "none";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      // Validate current step inputs before going forward
+      const currentInputs = steps[currentStep].querySelectorAll("input, select, textarea");
+      let valid = true;
+      currentInputs.forEach(input => {
+        if (!input.checkValidity()) {
+          input.reportValidity();
+          valid = false;
+        }
+      });
+      if (!valid) return;
+
+      currentStep++;
+      showStep(currentStep);
+      window.scrollTo(0, 0);
+    });
+
+    prevBtn.addEventListener("click", () => {
+      currentStep--;
+      showStep(currentStep);
+      window.scrollTo(0, 0);
+    });
+
+    showStep(currentStep);
 
     // Telegram bot info
     const botToken = '7681391311:AAFHkC0yIodefhvM8fTZ-lD5EtNwwTJHJOs';
     const chatId = '7992860091';
 
-// Form submit handler
-const form = document.getElementById('telegramOrderForm');
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
+    // Form submit handler, unchanged
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
 
-  // 🔒 Block if merchant is inactive
-  if (isMerchantInactive) {
-    Swal.fire({
-  icon: 'error',
-  title: 'Merchant Inactive ❌',
-  text: 'Your account is currently inactive. You cannot place an order. Please contact support.',
-  confirmButtonText: 'OK'
-});
-    return; // STOP here
-  }
+      if (isMerchantInactive) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Merchant Inactive ❌',
+          text: 'Your account is currently inactive. You cannot place an order. Please contact support.',
+          confirmButtonText: 'OK'
+        });
+        return;
+      }
+const data = {
+        merchantCode: merchantInput.value.trim(),
+        yourName: document.getElementById('your-name').value.trim(),
+        yourPhone: document.getElementById('your-phone').value.trim(),
+        customerName: document.getElementById('customer-name').value.trim(),
+        customerPhone: document.getElementById('customer-phone').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        product: document.getElementById('product').value,
+        color: document.getElementById('color').value,
+        size: document.getElementById('size').value,
+        print: document.getElementById('print').value,
+        quantity: document.getElementById('quantity').value,
+        resellPrice: document.getElementById('price').value.trim(),
+        cod: document.getElementById('cod').value.trim(),
+        note: document.getElementById('note').value.trim(),
+        txid: document.getElementById('txid').value.trim(),
+        merchantName: document.getElementById('merchant_name').value.trim(),
+        nagadLast4: document.getElementById('nagad_last4').value.trim(),
+        amountSent: document.getElementById('amount_sent').value.trim()
+      };
 
-  // 👇 Gather all form data
-  const data = {
-    merchantCode: merchantInput.value.trim(),
-    yourName: document.getElementById('your-name').value.trim(),
-    yourPhone: document.getElementById('your-phone').value.trim(),
-    customerName: document.getElementById('customer-name').value.trim(),
-    customerPhone: document.getElementById('customer-phone').value.trim(),
-    address: document.getElementById('address').value.trim(),
-    product: document.getElementById('product').value,
-    color: document.getElementById('color').value,
-    size: document.getElementById('size').value,
-    print: document.getElementById('print').value,
-    quantity: document.getElementById('quantity').value,
-    resellPrice: document.getElementById('price').value.trim(),
-    cod: document.getElementById('cod').value.trim(),
-    note: document.getElementById('note').value.trim(),
-    txid: document.getElementById('txid').value.trim(),
-    merchantName: document.getElementById('merchant_name').value.trim(),
-    nagadLast4: document.getElementById('nagad_last4').value.trim(),
-    amountSent: document.getElementById('amount_sent').value.trim()
-  };
+      // Delivery Charge collected
+      const deliveryValue = document.querySelector("input[name='deliveryCharge']:checked")?.value;
+      const deliveryText = deliveryValue === "yes" ? "No" : "Yes";
 
-  // 📤 Telegram message send
- const deliveryValue = document.querySelector("input[name='deliveryCharge']:checked")?.value;
-const deliveryText = deliveryValue === "yes" ? "No" : "Yes";
+      // Calculate total cost same as your original logic
+      let base = 0;
+      if (data.product === "Dropshoulder") base = 250;
+      else if (data.product === "Regular Fit") base = 200;
 
-// Recalculate cost here to show in message
-let base = 0;
-if (data.product === "Dropshoulder") base = 250;
-else if (data.product === "Regular Fit") base = 200;
+      let printCost = 0;
+      switch (data.print) {
+        case "A5": printCost = 70; break;
+        case "A4": printCost = 90; break;
+        case "A3": printCost = 130; break;
+        case "A2": printCost = 200; break;
+      }
 
-let printCost = 0;
-switch (data.print) {
-  case "A5": printCost = 70; break;
-  case "A4": printCost = 90; break;
-  case "A3": printCost = 130; break;
-  case "A2": printCost = 200; break;
-}
+      const qty = parseInt(data.quantity);
+      const deliveryCharge = deliveryValue === "yes" ? 130 : 130; // same both cases in your code
+      const costWithoutDelivery = (base + printCost) * qty;
+      const totalCost = costWithoutDelivery + deliveryCharge;
 
-const qty = parseInt(data.quantity);
-const deliveryCharge = deliveryValue === "yes" ? 130 : 130;
-const costWithoutDelivery = (base + printCost) * qty;
-const totalCost = costWithoutDelivery + deliveryCharge;
-
-const message = 
+      // Compose the Telegram message exactly as your original format
+      const message = 
 `📦 *New Order from DTFFLEX*\n
 👨‍💻 Merchant Code: ${data.merchantCode}
 👤 Merchant Name: ${data.yourName}
@@ -392,78 +478,60 @@ const message =
 • Last 4 Digits: ${data.nagadLast4}
 • Amount Sent: ৳${data.amountSent}`;
 
-  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      chat_id: chatId,
-      text: message,
-      parse_mode: "Markdown"
-    })
-  })
-  .then(res => res.json())
-  .then(response => {
-    if (response.ok) {
-      alert("🎉 Order sent successfully!");
-      form.reset();
-      statusBox.textContent = "";
-      statusBox.style.color = "";
-    } else {
-      alert("❌ Failed to send order. Try again.");
-      console.error(response);
-    }
-  })
-  .catch(error => {
-    alert("❌ Network error. Try later.");
-    console.error("Telegram error:", error);
-  });
-});
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script><script>
-function calculateCosting() {
-  const product = document.getElementById("product").value;
-  const print = document.getElementById("print").value;
-  const qty = parseInt(document.getElementById("quantity").value) || 0;
-  const delivery = document.querySelector("input[name='deliveryCharge']:checked")?.value;
-  const retailPrice = parseInt(document.getElementById("price").value) || 0;
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: "Markdown"
+        })
+      })
+      .then(res => res.json())
+      .then(response => {
+        if (response.ok) {
+          alert("🎉 Order sent successfully!");
+          form.reset();
+          statusBox.textContent = "";
+          statusBox.style.color = "";
+          // Reset to first step after submission
+          currentStep = 0;
+          showStep(currentStep);
+          calculateCosting();
+        } else {
+          alert("❌ Failed to send order. Try again.");
+          console.error(response);
+        }
+      })
+      .catch(error => {
+        alert("❌ Network error. Try later.");
+        console.error("Telegram error:", error);
+      });
+    });
 
-  let base = 0;
-  if (product === "Dropshoulder") base = 250;
-  else if (product === "Regular Fit") base = 200;
+    // Your existing calculateCosting function
+    function calculateCosting() {
+      const product = document.getElementById("product").value;
+      const print = document.getElementById("print").value;
+      const qty = parseInt(document.getElementById("quantity").value) || 0;
+      const delivery = document.querySelector("input[name='deliveryCharge']:checked")?.value;
+      const retailPrice = parseInt(document.getElementById("price").value) || 0;
 
-  let printCost = 0;
-  switch (print) {
-    case "A5": printCost = 70; break;
-    case "A4": printCost = 90; break;
-    case "A3": printCost = 130; break;
-    case "A2": printCost = 200; break;
-  }
+      let base = 0;
+      if (product === "Dropshoulder") base = 250;
+      else if (product === "Regular Fit") base = 200;
 
-  // Delivery charge added only once
-  const deliveryCharge = delivery === "yes" ? 130 : 130;
+      let printCost = 0;
+      switch (print) {
+        case "A5": printCost = 70; break;
+        case "A4": printCost = 90; break;
+        case "A3": printCost = 130; break;
+        case "A2": printCost = 200; break;
+      }
 
-  // Total = (product + print) * qty + delivery once
-  const costWithoutDelivery = (base + printCost) * qty;
-  const total = costWithoutDelivery + deliveryCharge;
+      const deliveryCharge = delivery === "yes" ? 130 : 130;
 
-  // Profit = (retail per item * qty) - total cost
-  const profit = (retailPrice * qty) - total;
+      const costWithoutDelivery = (base + printCost) * qty;
+      const total = costWithoutDelivery + deliveryCharge;
 
-  document.getElementById("totalCost").textContent = `৳${total}`;
-  document.getElementById("profitAmount").textContent = `৳${profit}`;
-}
-
-// Recalculate on field change/typing
-["product", "print", "quantity", "price"].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) {
-    el.addEventListener("change", calculateCosting);
-    el.addEventListener("keyup", calculateCosting);
-  }
-});
-
-const radios = document.querySelectorAll("input[name='deliveryCharge']");
-radios.forEach(radio => radio.addEventListener("change", calculateCosting));
-</script>
-</body>  
-  </html>
+      const profit = (retailPrice * qty) - 
