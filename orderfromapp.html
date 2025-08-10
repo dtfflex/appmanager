@@ -534,4 +534,26 @@ const data = {
       const costWithoutDelivery = (base + printCost) * qty;
       const total = costWithoutDelivery + deliveryCharge;
 
-      const profit = (retailPrice * qty) - 
+      const profit = (retailPrice * qty) - total;
+
+      document.getElementById("totalCost").textContent = `৳${total}`;
+      document.getElementById("profitAmount").textContent = `৳${profit}`;
+    }
+
+    // Recalculate on relevant input change
+    ["product", "print", "quantity", "price"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener("change", calculateCosting);
+        el.addEventListener("keyup", calculateCosting);
+      }
+    });
+
+    const radios = document.querySelectorAll("input[name='deliveryCharge']");
+    radios.forEach(radio => radio.addEventListener("change", calculateCosting));
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>  
+</html>
+        
