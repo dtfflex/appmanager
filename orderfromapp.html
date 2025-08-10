@@ -195,7 +195,7 @@
           <label for="print">Print Type</label>  
           <select id="print" required>  
             <option value="">Select one</option>  
-            <option>A2</option><option>A3</option><option>A4</option><option>A5</option><option>None</option>  
+            <option>A2</option><option>A3</option><option>A4</option><option>A5</option><option>Both Side - A5+A4</option><option>Both Side - A4+A3</option><option>None</option>  
           </select>  
         </div>  
         <div class="odf-field">  
@@ -441,6 +441,8 @@ const data = {
         case "A4": printCost = 90; break;
         case "A3": printCost = 130; break;
         case "A2": printCost = 200; break;
+        case "Both Side - A5+A4": printCost = 130; break;
+        case "Both Side - A4+A3": printCost = 150; break;
       }
 
       const qty = parseInt(data.quantity);
@@ -527,6 +529,8 @@ const data = {
         case "A4": printCost = 90; break;
         case "A3": printCost = 130; break;
         case "A2": printCost = 200; break;
+        case "Both Side - A5+A4": printCost = 130; break;
+        case "Both Side - A4+A3": printCost = 150; break;
       }
 
       const deliveryCharge = delivery === "yes" ? 130 : 130;
@@ -556,4 +560,3 @@ const data = {
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>  
 </html>
-        
