@@ -73,6 +73,8 @@
       <option value="A4">A4</option>
       <option value="A3">A3</option>
       <option value="A2">A2</option>
+      <option value="A5+A4">Both Side - A5+A4</option>
+      <option value="A4+A3">Both Side - A4+A3</option>
     </select>
 
     <label for="quantity">Quantity</label>
@@ -113,6 +115,8 @@
     else if (print === "A4") printCost = 90;
     else if (print === "A3") printCost = 130;
     else if (print === "A2") printCost = 200;
+    else if (print === "A5+A4") printCost = 130;
+    else if (print === "A4+A3") printCost = 150;
 
 
     if (quantity >= 2) printCost *= 1;
