@@ -556,7 +556,16 @@ const data = {
     const radios = document.querySelectorAll("input[name='deliveryCharge']");
     radios.forEach(radio => radio.addEventListener("change", calculateCosting));
   </script>
-
+  <script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const selected = JSON.parse(localStorage.getItem("selectedProduct"));
+    if (selected) {
+      // Assuming you have input fields with IDs "product" and "print"
+      document.getElementById("product").value = selected.product;
+      document.getElementById("print").value = selected.print;
+    }
+  });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>  
 </html>
